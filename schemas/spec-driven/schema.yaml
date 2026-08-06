@@ -1,0 +1,149 @@
+name: spec-driven
+version: 1
+description: 默认工作流：提案、规格、设计、任务
+artifacts:
+  - id: proposal
+    generates: proposal.md
+    description: 说明变更动机与范围的初始提案文档
+    requires: []
+    template: |
+      # 提案
+
+      ## 为什么
+
+      ## 变更内容
+
+      ## 影响范围
+    instruction: |
+      创建用于说明“为什么需要此变更”的提案文档。
+
+      章节要求：
+      - **为什么**：用 1～2 句话说明问题或机会；要解决什么问题，为什么现在做？
+      - **变更内容**：用列表具体说明新增能力、修改或移除内容；破坏性变更标记为 **BREAKING**。
+      - **能力**：识别需要新建或修改的规格：
+        - **新增能力**：列出引入的能力；每项对应 `specs/<名称>/spec.md`，名称使用 kebab-case，例如 `user-auth`、`data-export`。
+        - **修改能力**：仅列出需求级行为发生变化的既有能力，不要列纯实现调整；每项需要 delta spec。先检查 `mercuryspec/specs/` 中已有名称；没有需求变化则留空。
+      - **影响范围**：受影响的代码、API、依赖或系统。
+
+      **重要：**“能力”章节是 proposal 与 specs 阶段之间的契约。填写前先调研已有规格；列出的每项能力都必须有对应 spec 文件。
+
+      **Step**
+      1. **如果没有提供 prd 文档 url，询问想要创建什么需求**
+      use **AskUserQuestion tool**(open-ended, no preset options) to ask:
+      > "当前没有产品prd，你想创建的是一个什么任务？说明：
+      1. **为什么**
+      2. **改什么**
+      3. **能力**
+         - **新增能力**
+         - **修改能力**"
+
+      保持简洁（约 1～2 页），聚焦“为什么”，不要展开“怎么做”；实现细节应放入 design.md。
+      这是后续 specs、design 与 tasks 的基础。
+  - id: specs
+    generates: "specs/**/*.md"
+    description: 描述变更行为与场景的详细规格
+    requires:
+      - proposal
+    template: |
+      ## 新增需求
+
+      ### Requirement: <需求名称>
+
+      #### Scenario: <场景名称>
+      - **WHEN** <条件>
+      - **THEN** <结果>
+    instruction: |
+      创建说明系统“必须做什么”的规格文件。
+
+      为 proposal 的“能力”章节中每一项能力创建一个 spec 文件：
+      - 新增能力：使用 proposal 中完全一致的 kebab-case 名称，路径为 `specs/<能力>/spec.md`。
+      - 修改能力：从 `mercuryspec/specs/<能力>/` 找到既有文件夹名称，并在 `specs/<能力>/spec.md` 创建 delta spec。
+
+      Delta 操作（使用 `##` 标题）：
+      - **ADDED Requirements**：新增能力。
+      - **MODIFIED Requirements**：修改后的行为；必须包含完整更新内容。
+      - **REMOVED Requirements**：移除的行为；必须包含 **Reason** 与 **Migration**。
+      - **RENAMED Requirements**：仅名称变更，使用 `FROM:` / `TO:` 格式。
+
+      Requirement 格式：
+      - 每个需求使用 `### Requirement: <名称>`，之后写需求说明。
+      - 规范性要求使用 SHALL/MUST，不使用 should/may。
+      - 每个场景使用 `#### Scenario: <名称>`，并采用 WHEN/THEN 格式。
+      - **关键：**场景必须恰好使用四个井号（`####`）；三个井号或普通列表不会被正确识别。
+      - 每项需求至少包含一个场景。
+
+      修改既有需求时：先从 `mercuryspec/specs/<能力>/spec.md` 定位需求；复制从 `### Requirement:` 到全部场景的完整区块；粘贴到 `## MODIFIED Requirements` 下后再修改；标题文本必须保持一致（忽略空白）。
+
+      不要用不完整内容修改既有需求，否则归档时会丢失细节；若只是新增关注点而未改变既有行为，应使用 ADDED。
+      规格必须可测试，每个场景都应能对应一个潜在测试用例。
+  - id: design
+    generates: design.md
+    description: 包含实现决策与技术方案的设计文档
+    requires:
+      - proposal
+    template: |
+      # 设计
+
+      ## 上下文
+
+      ## 方案
+
+      ## 关键决策
+    instruction: |
+      创建说明“如何实现此变更”的技术设计文档。
+
+      当出现以下任一情况时应创建 design.md：跨服务/模块的改动或新的架构模式；新的外部依赖或重要数据模型调整；安全、性能或迁移复杂性；编码前需要技术决策才能消除的歧义。
+
+      章节要求：
+      - **上下文**：背景、当前状态、约束与相关方。
+      - **目标 / 非目标**：本设计要达成的结果，以及明确不做的内容。
+      - **决策**：关键技术选择及其理由；每项写明为什么选择此方案而非替代方案。
+      - **风险 / 权衡**：已知限制和可能的问题，格式为 `[风险] → 缓解措施`。
+      - **迁移计划**：发布步骤以及适用时的回滚方案。
+      - **开放问题**：尚未解决的决策或未知项。
+
+      聚焦架构与实现路径，而不是逐行实现细节；引用 proposal 说明动机，引用 specs 说明需求。
+      好的设计文档应解释技术决策背后的“为什么”。
+  - id: tasks
+    generates: tasks.md
+    description: 可跟踪的实施任务清单
+    requires:
+      - specs
+      - design
+    template: |
+      # 任务
+
+      ## 1. 实施
+
+      - [ ] 1.1 <可验证的任务>
+    instruction: |
+      创建把实施工作拆解为任务的清单。
+
+      **重要：必须严格遵循 checkbox 模板。** apply 阶段依靠 checkbox 格式跟踪进度；未使用 `- [ ]` 的任务不会被跟踪。
+
+      编写规则：
+      - 相关任务按 `##` 编号标题分组。
+      - 每项任务必须写为 `- [ ] X.Y 任务说明`。
+      - 任务应足够小，能在一个会话中完成。
+      - 按依赖顺序排列，先处理前置工作。
+
+      示例：
+      ```
+      ## 1. 准备
+
+      - [ ] 1.1 创建新模块结构
+      - [ ] 1.2 在 package.json 中添加依赖
+
+      ## 2. 核心实现
+
+      - [ ] 2.1 实现数据导出函数
+      - [ ] 2.2 添加 CSV 格式化工具
+      ```
+
+      参考 specs 确定“做什么”，参考 design 确定“如何做”。每项任务必须可验证，即完成与否应当清晰可判断。
+apply:
+  requires: [tasks]
+  tracks: tasks.md
+  instruction: |
+    读取上下文文件，逐项完成未完成任务，并及时标记为已完成。
+    遇到阻塞或需要澄清时暂停。

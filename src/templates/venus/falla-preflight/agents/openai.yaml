@@ -1,0 +1,4 @@
+interface:
+  display_name: "Falla Preflight"
+  short_description: "创建 change 并检查 PRD 功能实现状态，记录未明确事项"
+  default_prompt: "使用 $falla-preflight 创建 change、检查功能是否已实现并生成 preflight.md。"
