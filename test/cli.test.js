@@ -9,10 +9,10 @@ import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 
 test('install command writes skills for all supported tools non-interactively', async () => {
-  const projectPath = await mkdtemp(path.join(os.tmpdir(), 'falla-mercury-cli-'));
+  const projectPath = await mkdtemp(path.join(os.tmpdir(), 'customworkflow-cli-'));
   try {
     const { stdout } = await execFileAsync(process.execPath, [
-      path.join(process.cwd(), 'bin', 'falla-mercury.js'),
+      path.join(process.cwd(), 'bin', 'customworkflow.js'),
       'install',
       projectPath,
       '--no-interactive',
@@ -21,12 +21,12 @@ test('install command writes skills for all supported tools non-interactively', 
     ]);
 
     assert.match(stdout, /Installed \d+ files/);
-    await stat(path.join(projectPath, '.claude', 'skills', 'falla-preflight', 'SKILL.md'));
-    await stat(path.join(projectPath, '.claude', 'skills', 'falla-propose', 'SKILL.md'));
-    await stat(path.join(projectPath, '.codex', 'skills', 'falla-preflight', 'agents', 'openai.yaml'));
-    await stat(path.join(projectPath, '.codex', 'skills', 'falla-apply-change', 'SKILL.md'));
-    await stat(path.join(projectPath, '.falla', 'spec', '[Must Read]soul.md'));
-    await stat(path.join(projectPath, '.claude', 'hooks', 'falla-spec-guard.mjs'));
+    await stat(path.join(projectPath, '.claude', 'skills', 'cwf-preflight', 'SKILL.md'));
+    await stat(path.join(projectPath, '.claude', 'skills', 'cwf-propose', 'SKILL.md'));
+    await stat(path.join(projectPath, '.codex', 'skills', 'cwf-preflight', 'agents', 'openai.yaml'));
+    await stat(path.join(projectPath, '.codex', 'skills', 'cwf-apply-change', 'SKILL.md'));
+    await stat(path.join(projectPath, '.customworkflow', 'spec', '[Must Read]soul.md'));
+    await stat(path.join(projectPath, '.claude', 'hooks', 'cwf-spec-guard.mjs'));
     await stat(path.join(projectPath, 'AGENTS.md'));
   } finally {
     await rm(projectPath, { recursive: true, force: true });

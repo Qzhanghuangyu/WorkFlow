@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// FallaMercury SessionStart hook (Codex).
+// CustomWorkFlow SessionStart hook (Codex).
 //
 // Codex has no `Skill` tool to hang a PreToolUse hook on — invoking a skill is
 // just the model reading SKILL.md via a shell command, so a per-skill matcher
@@ -17,10 +17,10 @@ const GLOBAL_SPEC = '[Must Read]soul.md';
 
 // Per-phase docs the model should read when it runs each skill.
 const PHASE_SPECS = [
-  ['falla-preflight', '[分析必读]preflight.md'],
-  ['falla-propose', '[架构必读]propose.md'],
-  ['falla-apply-change', '[模块选读]apply.md'],
-  ['falla-archive-change', '[任务选读]archive.md'],
+  ['cwf-preflight', '[分析必读]preflight.md'],
+  ['cwf-propose', '[架构必读]propose.md'],
+  ['cwf-apply-change', '[模块选读]apply.md'],
+  ['cwf-archive-change', '[任务选读]archive.md'],
 ];
 
 function readStdin() {
@@ -37,7 +37,7 @@ function readStdin() {
 
 /** Candidate spec directories, most specific first. */
 function specDirs(projectDir) {
-  return [path.join(projectDir, '.falla', 'spec'), path.join(projectDir, 'spec')];
+  return [path.join(projectDir, '.customworkflow', 'spec'), path.join(projectDir, 'spec')];
 }
 
 async function loadSpec(projectDir, relativeFile) {
@@ -65,18 +65,18 @@ async function main() {
   const soul = await loadSpec(projectDir, GLOBAL_SPEC);
 
   const phaseList = PHASE_SPECS.map(
-    ([skill, doc]) => `- ${skill} 前必读：\`.falla/spec/${doc}\``
+    ([skill, doc]) => `- ${skill} 前必读：\`.customworkflow/spec/${doc}\``
   ).join('\n');
 
   const header =
-    '【FallaMercury 全局约束 — 本会话必须遵守】\n' +
-    '以下是 FallaMercury 的核心思想（soul）。使用 falla-preflight / falla-propose / ' +
-    'falla-apply-change / falla-archive-change 等 skill 时必须遵循，并在对应阶段额外读取该阶段的 spec：\n' +
+    '【CustomWorkFlow 全局约束 — 本会话必须遵守】\n' +
+    '以下是 CustomWorkFlow 的核心思想（soul）。使用 cwf-preflight / cwf-propose / ' +
+    'cwf-apply-change / cwf-archive-change 等 skill 时必须遵循，并在对应阶段额外读取该阶段的 spec：\n' +
     phaseList;
 
   const additionalContext = soul
     ? `${header}\n\n===== ${GLOBAL_SPEC} =====\n${soul.trim()}`
-    : `${header}\n\n（提示：未找到 .falla/spec/${GLOBAL_SPEC}，请确认它已随安装写入。）`;
+    : `${header}\n\n（提示：未找到 .customworkflow/spec/${GLOBAL_SPEC}，请确认它已随安装写入。）`;
 
   process.stdout.write(
     JSON.stringify({

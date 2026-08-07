@@ -1,32 +1,32 @@
 ---
-name: falla-archive-change
+name: cwf-archive-change
 description: 在实验性工作流中归档已完成的变更。适用于用户希望在实施完成后完成收尾并归档变更时。
-allowed-tools: Bash(falla:*)
+allowed-tools: Bash(cwf:*)
 license: MIT
-compatibility: 需要 falla CLI。
+compatibility: 需要 cwf CLI。
 metadata:
-  author: falla
+  author: cwf
   version: "1.0"
   generatedBy: "copied-from-OpenSpec"
 ---
 
 在实验性工作流中归档已完成的变更。
 
-**路径约束：** 所有 change、artifact 和归档均位于当前目标项目根目录的 `mercuryspec/` 下。所有 `falla` 命令必须在该项目根目录执行，不得写入 FallaMercury 包源码目录、父目录、相邻目录或全局 OpenSpec 安装中的工作区。
+**路径约束：** 所有 change、artifact 和归档均位于当前目标项目根目录的 `cwfspec/` 下。所有 `cwf` 命令必须在该项目根目录执行，不得写入 CustomWorkFlow 包源码目录、父目录、相邻目录或全局 OpenSpec 安装中的工作区。
 
 **输入：** 可选地指定变更名称。若省略，请判断能否从对话上下文推断；若表述模糊或存在歧义，**必须**提示用户选择可用变更。
 
 **步骤**
 
 0. **【强制】确保 spec 约束已在上下文中（不得跳过）**
-   - 全局必读：`.falla/spec/[Must Read]soul.md`（回退：`spec/[Must Read]soul.md`）
-   - 本阶段必读：`.falla/spec/[任务选读]archive.md`（回退：`spec/[任务选读]archive.md`）
+   - 全局必读：`.customworkflow/spec/[Must Read]soul.md`（回退：`spec/[Must Read]soul.md`）
+   - 本阶段必读：`.customworkflow/spec/[任务选读]archive.md`（回退：`spec/[任务选读]archive.md`）
    - **仅当上述约束尚未出现在当前上下文中时才去读取**（Claude 环境下 PreToolUse hook 通常已自动注入，此时不要重复读取以免浪费上下文）。
    - 未读取并理解上述约束前，**不得**进行后续任何步骤或执行归档。
 
 1. **若未提供变更名称，提示用户选择**
 
-   运行 `falla list --json` 获取可用变更。使用 **AskUserQuestion 工具**让用户选择。
+   运行 `cwf list --json` 获取可用变更。使用 **AskUserQuestion 工具**让用户选择。
 
    仅展示活跃变更（尚未归档的变更）。
    如可获得，请展示每项变更使用的 schema。
@@ -35,7 +35,7 @@ metadata:
 
 2. **检查 artifact 完成状态**
 
-   运行 `falla status --change "<name>" --json` 检查 artifact 是否完成。
+   运行 `cwf status --change "<name>" --json` 检查 artifact 是否完成。
 
    解析 JSON 以了解：
    - `schemaName`：正在使用的工作流
@@ -116,7 +116,7 @@ metadata:
 
 **约束**
 - 未提供变更时，始终提示用户选择
-- 使用 artifact 图（`falla status --json`）检查完成状态
+- 使用 artifact 图（`cwf status --json`）检查完成状态
 - 不要因警告而阻止归档——只需告知并确认
 - 移动到归档时保留 `.openspec.yaml`（它将随目录一起移动）
 - 清晰总结执行结果

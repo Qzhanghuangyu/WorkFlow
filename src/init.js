@@ -8,17 +8,17 @@ const templatesRoot = path.join(
 );
 const templateDirectory = path.join(templatesRoot, 'venus');
 const specTemplateDirectory = path.join(templatesRoot, 'spec');
-const hookTemplateFile = path.join(templatesRoot, 'hooks', 'falla-spec-guard.mjs');
-const codexHookTemplateFile = path.join(templatesRoot, 'hooks', 'falla-spec-session.mjs');
+const hookTemplateFile = path.join(templatesRoot, 'hooks', 'cwf-spec-guard.mjs');
+const codexHookTemplateFile = path.join(templatesRoot, 'hooks', 'cwf-spec-session.mjs');
 
 /** Directory (relative to a target project) where spec constraints are installed. */
-export const SPEC_INSTALL_DIR = path.join('.falla', 'spec');
+export const SPEC_INSTALL_DIR = path.join('.customworkflow', 'spec');
 /** OpenSpec directory (relative to a target project) containing project specs. */
 export const OPENSPEC_SPEC_DIR = path.join('openspec', 'specs');
 /** Path (relative to a target project) of the installed Claude PreToolUse hook. */
-export const HOOK_INSTALL_PATH = path.join('.claude', 'hooks', 'falla-spec-guard.mjs');
+export const HOOK_INSTALL_PATH = path.join('.claude', 'hooks', 'cwf-spec-guard.mjs');
 /** Path (relative to a target project) of the installed Codex SessionStart hook. */
-export const CODEX_HOOK_INSTALL_PATH = path.join('.codex', 'hooks', 'falla-spec-session.mjs');
+export const CODEX_HOOK_INSTALL_PATH = path.join('.codex', 'hooks', 'cwf-spec-session.mjs');
 /** Path (relative to a target project) of the Codex config that registers the hook. */
 export const CODEX_CONFIG_PATH = path.join('.codex', 'config.toml');
 
@@ -27,7 +27,7 @@ export const TOOLS = [
   { id: 'codex', name: 'Codex', directory: '.codex' },
 ];
 
-/** Returns the OpenSpec skills bundled with FallaMercury, sorted by name. */
+/** Returns the OpenSpec skills bundled with CustomWorkFlow, sorted by name. */
 export async function getSkillTemplates() {
   const entries = await readdir(templateDirectory, { withFileTypes: true });
   return Promise.all(
@@ -53,7 +53,7 @@ export async function getSkillTemplates() {
   ).then((templates) => templates.sort((a, b) => a.name.localeCompare(b.name)));
 }
 
-/** Returns the spec constraint documents bundled with FallaMercury, sorted by name. */
+/** Returns the spec constraint documents bundled with CustomWorkFlow, sorted by name. */
 export async function getSpecTemplates() {
   const entries = await readdir(specTemplateDirectory, { withFileTypes: true });
   return Promise.all(
@@ -67,7 +67,7 @@ export async function getSpecTemplates() {
 }
 
 /**
- * Installs the spec constraint documents into `<root>/.falla/spec/` so skills
+ * Installs the spec constraint documents into `<root>/.customworkflow/spec/` so skills
  * and the PreToolUse hook can always resolve them, regardless of project.
  *
  * @param {string} root resolved project directory
@@ -112,7 +112,7 @@ async function listFilesRecursively(directory, relativeDirectory = '') {
 
 /**
  * If the target project already uses OpenSpec, copies its project specs from
- * `<root>/openspec/specs/` into FallaMercury's shared constraint directory.
+ * `<root>/openspec/specs/` into CustomWorkFlow's shared constraint directory.
  * The OpenSpec subtree is preserved, and a repeated init refreshes changed
  * files. Missing OpenSpec directories are intentionally treated as a no-op.
  *
@@ -141,7 +141,7 @@ export async function installOpenSpecConstraints(root) {
 }
 
 /**
- * Installs the Claude PreToolUse hook that forces falla-* skills to load their
+ * Installs the Claude PreToolUse hook that forces cwf-* skills to load their
  * spec constraints. Writes the hook script and merges (never overwrites) the
  * hook entry into `<root>/.claude/settings.json`.
  *
@@ -165,7 +165,7 @@ export async function installClaudeSpecHook(root) {
     settings = {};
   }
 
-  const command = 'node "$CLAUDE_PROJECT_DIR/.claude/hooks/falla-spec-guard.mjs"';
+  const command = 'node "$CLAUDE_PROJECT_DIR/.claude/hooks/cwf-spec-guard.mjs"';
   settings.hooks = settings.hooks ?? {};
   const preToolUse = Array.isArray(settings.hooks.PreToolUse)
     ? settings.hooks.PreToolUse
@@ -192,13 +192,13 @@ export async function installClaudeSpecHook(root) {
   return written;
 }
 
-const CODEX_HOOK_MARKER = '# falla-spec-session hook';
+const CODEX_HOOK_MARKER = '# cwf-spec-session hook';
 const CODEX_HOOK_CONFIG = `${CODEX_HOOK_MARKER}
 [[hooks.SessionStart]]
 
 [[hooks.SessionStart.hooks]]
 type = "command"
-command = "node ./.codex/hooks/falla-spec-session.mjs"
+command = "node ./.codex/hooks/cwf-spec-session.mjs"
 `;
 
 /**
@@ -240,18 +240,18 @@ export async function installCodexSpecHook(root) {
   return written;
 }
 
-const AGENTS_MARKER = '<!-- falla-spec-guard -->';
+const AGENTS_MARKER = '<!-- cwf-spec-guard -->';
 const AGENTS_SECTION = `${AGENTS_MARKER}
-## FallaMercury spec 约束（必读）
+## CustomWorkFlow spec 约束（必读）
 
-使用 \`falla-preflight\` / \`falla-propose\` / \`falla-apply-change\` / \`falla-archive-change\` 这些 skill 前，
-**必须**先读取 \`.falla/spec/\` 下对应前缀的约束文档：
+使用 \`cwf-preflight\` / \`cwf-propose\` / \`cwf-apply-change\` / \`cwf-archive-change\` 这些 skill 前，
+**必须**先读取 \`.customworkflow/spec/\` 下对应前缀的约束文档：
 
-- 全局入口（任何阶段必读）：\`.falla/spec/[Must Read]soul.md\`
-- PRD 分析（preflight）：\`.falla/spec/[分析必读]preflight.md\`
-- 规划 / 拆解（propose）：\`.falla/spec/[架构必读]propose.md\`
-- 实施（apply）：\`.falla/spec/[模块选读]apply.md\`
-- 归档（archive）：\`.falla/spec/[任务选读]archive.md\`
+- 全局入口（任何阶段必读）：\`.customworkflow/spec/[Must Read]soul.md\`
+- PRD 分析（preflight）：\`.customworkflow/spec/[分析必读]preflight.md\`
+- 规划 / 拆解（propose）：\`.customworkflow/spec/[架构必读]propose.md\`
+- 实施（apply）：\`.customworkflow/spec/[模块选读]apply.md\`
+- 归档（archive）：\`.customworkflow/spec/[任务选读]archive.md\`
 
 前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读。
 未读取并理解约束前，不得执行对应 skill 的后续步骤。
@@ -259,7 +259,7 @@ const AGENTS_SECTION = `${AGENTS_MARKER}
 
 /**
  * Ensures `<root>/AGENTS.md` instructs Codex (which has no PreToolUse hook) to
- * read the spec constraints before running falla-* skills. Idempotent.
+ * read the spec constraints before running cwf-* skills. Idempotent.
  *
  * @param {string} root resolved project directory
  * @returns {Promise<string>} absolute path of AGENTS.md
@@ -283,7 +283,7 @@ export async function installAgentsGuidance(root) {
 }
 
 /**
- * Installs the shared FallaMercury skills into every selected project-local
+ * Installs the shared CustomWorkFlow skills into every selected project-local
  * agent directory, plus the bundled and existing OpenSpec constraint
  * documents, the Claude PreToolUse hook (Claude only), and Codex guidance in
  * AGENTS.md.

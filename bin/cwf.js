@@ -6,9 +6,9 @@ import { getChangeStatus, loadSchema } from '../src/mercury/artifact-graph.js';
 
 function usage() {
   return [
-    'Usage: falla new change <name> [--schema <name>] [--goal <text>] [--description <text>] [--json]',
-    '       falla status --change <name> [--json]',
-    '       falla instructions <proposal|design|tasks> --change <name> [--json]',
+    'Usage: cwf new change <name> [--schema <name>] [--goal <text>] [--description <text>] [--json]',
+    '       cwf status --change <name> [--json]',
+    '       cwf instructions <proposal|design|tasks> --change <name> [--json]',
   ].join('\n');
 }
 
@@ -70,7 +70,7 @@ try {
       } else {
         console.log(`Created change '${change.id}' at ${change.path}/`);
         console.log(`Schema: ${change.schema}`);
-        console.log(`Next: falla status --change ${change.id}`);
+        console.log(`Next: cwf status --change ${change.id}`);
       }
     } else if (verb === 'status') {
       const options = parseChangeOptions([noun, name, ...arguments_].filter(Boolean));

@@ -38,7 +38,7 @@ const FRAMES = ORBIT_POINTS.map(([activeRow, activeColumn]) =>
 
 function textLines() {
   return [
-    bold('Welcome to FallaMercury'),
+    bold('Welcome to CustomWorkFlow'),
     dim('Project skill setup'),
     '',
     'This setup will configure:',

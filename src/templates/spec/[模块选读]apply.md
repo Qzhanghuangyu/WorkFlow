@@ -2,14 +2,14 @@
 
 > **读取必要性：模块选读。**
 > 当 agent 要**实施某个（子）change / 模块控件**时读取本文；
-> 只做整体规划或最终归档时可不读。它是 FallaMercury 团队协作模型的落地说明。
+> 只做整体规划或最终归档时可不读。它是 CustomWorkFlow 团队协作模型的落地说明。
 
 ## 目标
 
 把规划好的 change 变成代码，并且以**可分派、可追踪责任人**的方式推进。
 对应链路：`tasks → apply`。
 
-## FallaMercury 相对 OpenSpec 的关键扩展：一个 change 拆成多个 change
+## CustomWorkFlow 相对 OpenSpec 的关键扩展：一个 change 拆成多个 change
 
 进入 apply 阶段时，**不要**让单个执行者吞下整个 change。按 propose 阶段的拆解结果，把一个 change 拆成**多个可独立实施的子 change**：
 
@@ -51,8 +51,8 @@
 
 ## 对应 skill 与命令
 
-- Skill：`/falla:apply`
-- 关键命令：`falla status --change "<name>" --json`、`falla instructions apply --change "<name>" --json`、`falla list --json`
+- Skill：`/cwf:apply`
+- 关键命令：`cwf status --change "<name>" --json`、`cwf instructions apply --change "<name>" --json`、`cwf list --json`
 
 ## 完成标准
 

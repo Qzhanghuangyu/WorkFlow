@@ -2,7 +2,7 @@
 
 > **读取必要性：架构必读。**
 > 只要涉及「规划一个 change / 决定怎么拆任务」，agent 必须读取本文；
-> 它承载了 FallaMercury 最核心的架构取向（见 [Must Read] soul.md 第 4 节）。
+> 它承载了 CustomWorkFlow 最核心的架构取向（见 [Must Read] soul.md 第 4 节）。
 > 纯粹实施单个模块或收尾归档时，可不读本文。
 
 ## 目标
@@ -44,8 +44,8 @@
 
 ## 对应 skill 与命令
 
-- Skill：`/falla:propose`（一次性生成全部 artifact）
-- 关键命令：`falla new change "<name>"`、`falla status --change "<name>" --json`、`falla instructions <artifact-id> --change "<name>" --json`
+- Skill：`/cwf:propose`（一次性生成全部 artifact）
+- 关键命令：`cwf new change "<name>"`、`cwf status --change "<name>" --json`、`cwf instructions <artifact-id> --change "<name>" --json`
 
 ## 完成标准
 

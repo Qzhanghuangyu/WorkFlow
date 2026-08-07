@@ -6,8 +6,8 @@ import test from 'node:test';
 import { getChangeStatus, loadSchema } from '../src/mercury/artifact-graph.js';
 
 test('按 schema 依赖计算 artifact 的 ready、blocked 和 done 状态', async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'falla-mercury-graph-'));
-  const changeDir = path.join(root, 'mercuryspec', 'changes', 'add-auth');
+  const root = await mkdtemp(path.join(os.tmpdir(), 'customworkflow-graph-'));
+  const changeDir = path.join(root, 'cwfspec', 'changes', 'add-auth');
   try {
     await mkdir(changeDir, { recursive: true });
     await writeFile(path.join(changeDir, '.openspec.yaml'), 'schema: spec-driven\n');
@@ -32,8 +32,8 @@ test('按 schema 依赖计算 artifact 的 ready、blocked 和 done 状态', asy
 });
 
 test('从 schema.yaml 读取 design 的模板和指引', async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'falla-mercury-schema-'));
-  const changeDir = path.join(root, 'mercuryspec', 'changes', 'add-auth');
+  const root = await mkdtemp(path.join(os.tmpdir(), 'customworkflow-schema-'));
+  const changeDir = path.join(root, 'cwfspec', 'changes', 'add-auth');
   try {
     await mkdir(changeDir, { recursive: true });
     const { schema } = loadSchema(root, changeDir);

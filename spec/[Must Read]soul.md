@@ -1,6 +1,6 @@
-# FallaMercury 的灵魂（Soul）
+# CustomWorkFlow 的灵魂（Soul）
 
-> 本文档是 FallaMercury 的核心思想（Soul），也是整个 `spec/` 的**全局入口**，
+> 本文档是 CustomWorkFlow 的核心思想（Soul），也是整个 `spec/` 的**全局入口**，
 > 说明它「为什么存在」以及「如何做决策」。
 > 当具体的 schema、skill 或 CLI 行为与本文冲突时，以本文所述的取向为准去修正它们。
 
@@ -28,7 +28,7 @@
 
 ## 1. 我们是谁
 
-FallaMercury 是在 [OpenSpec](https://github.com/) SDD（Spec-Driven Development，规格驱动开发）思路上改造而来的**任务拆解和SDD框架**，专门面向 **Android / 移动端** 工程。
+CustomWorkFlow 是在 [OpenSpec](https://github.com/) SDD（Spec-Driven Development，规格驱动开发）思路上改造而来的**任务拆解和SDD框架**，专门面向 **Android / 移动端** 工程。
 
 它继承 OpenSpec 的核心链路——
 **proposal（提案）→ specs（规格）→ design（设计）→ tasks（任务）→ apply（实施）→ archive（归档）**——
@@ -36,7 +36,7 @@ FallaMercury 是在 [OpenSpec](https://github.com/) SDD（Spec-Driven Developmen
 
 ## 2. 我们要解决的两个问题
 
-OpenSpec 是一套通用的 SDD 框架，直接用在 Android 项目上会暴露两个缺陷。FallaMercury 存在的全部理由，就是补齐它们：
+OpenSpec 是一套通用的 SDD 框架，直接用在 Android 项目上会暴露两个缺陷。CustomWorkFlow 存在的全部理由，就是补齐它们：
 
 1. **UI 还原度差**——从 Figma 设计稿到 Android 界面，AI 无法做到像素级对齐。
 2. **团队协同弱**——OpenSpec 的一个 change 默认是「一个人 / 一个 agent 从头做到尾」，缺少可拆分、可分派、可追踪责任人的协作模型。
@@ -59,7 +59,7 @@ OpenSpec 是一套通用的 SDD 框架，直接用在 Android 项目上会暴露
 
 ### 信条二：为团队协作而拆解（团队协同）
 
-FallaMercury 的任务拆解，第一优先级不是「让一个 agent 更好地独立完成」，而是**「让任务能被多个人 / 多个 agent 并行认领与协作」**。
+CustomWorkFlow 的任务拆解，第一优先级不是「让一个 agent 更好地独立完成」，而是**「让任务能被多个人 / 多个 agent 并行认领与协作」**。
 
 拆解与协同的具体原则见下一节。
 
@@ -94,7 +94,7 @@ UI 大任务不作为一个整体交付，而是继续拆解为**独立的模块
 
 ### 4.4 apply 阶段：一个 change 拆解为多个 change
 
-这是 FallaMercury 相对 OpenSpec 最关键的协作扩展。
+这是 CustomWorkFlow 相对 OpenSpec 最关键的协作扩展。
 
 在规划阶段，一个 change 完成 proposal / specs / design / tasks；进入 **apply（实施）阶段**时，我们不再让单个执行者吞下整个 change，而是**把这一个 change 按上面的拆解结果，拆成多个可独立实施的子 change**：
 
@@ -110,8 +110,8 @@ UI 大任务不作为一个整体交付，而是继续拆解为**独立的模块
 - 记录它依赖 / 被依赖的其他 change（对应拓扑关系）。
 - 记录当前状态与交接信息，便于团队随时看清「谁在做什么、卡在哪、下一步谁接」。
 
-`comate.md` 让「团队协同」从口头约定变成可追踪的文件事实，是 FallaMercury 协作模型的落地载体。
+`comate.md` 让「团队协同」从口头约定变成可追踪的文件事实，是 CustomWorkFlow 协作模型的落地载体。
 
 ## 5. 一句话总结
 
-> **FallaMercury = SDD 的严谨 + 对 AI 边界的诚实（UI 交给人做最后 20%）+ 为团队而生的拆解（MVVM 分层、控件粒度、拓扑依赖、多 change 分派与 comate.md 责任台账）。**
+> **CustomWorkFlow = SDD 的严谨 + 对 AI 边界的诚实（UI 交给人做最后 20%）+ 为团队而生的拆解（MVVM 分层、控件粒度、拓扑依赖、多 change 分派与 comate.md 责任台账）。**

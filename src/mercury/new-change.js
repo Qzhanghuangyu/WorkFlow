@@ -24,12 +24,12 @@ export function validateChangeName(name) {
  * Returns the current project's planning root.
  *
  * An explicit `cwd` is retained for programmatic callers and tests. The CLI
- * uses FALLA_MERCURY_HOME when explicitly configured; otherwise it uses the
- * command's working directory so globally-installed FallaMercury never writes
+ * uses CWF_HOME when explicitly configured; otherwise it uses the
+ * command's working directory so globally-installed CustomWorkFlow never writes
  * changes back into its own package checkout.
  */
 export function getPlanningRoot(options = {}) {
-  return path.resolve(options.cwd ?? process.env.FALLA_MERCURY_HOME ?? process.cwd());
+  return path.resolve(options.cwd ?? process.env.CWF_HOME ?? process.cwd());
 }
 
 function yamlString(value) {
@@ -40,7 +40,7 @@ function yamlString(value) {
  * Creates a local OpenSpec change scaffold.
  *
  * By default, all generated files are stored under the current project's
- * `mercuryspec/` directory. The command never searches parent directories for
+ * `cwfspec/` directory. The command never searches parent directories for
  * an unrelated OpenSpec workspace.
  */
 export async function createChange(name, options = {}) {
@@ -49,7 +49,7 @@ export async function createChange(name, options = {}) {
 
   const root = getPlanningRoot(options);
   const schema = options.schema ?? DEFAULT_SCHEMA;
-  const specDir = path.join(root, 'mercuryspec');
+  const specDir = path.join(root, 'cwfspec');
   const changesDir = path.join(specDir, 'changes');
   const changeDir = path.join(changesDir, name);
 

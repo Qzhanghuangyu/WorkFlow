@@ -3,7 +3,7 @@ const dim = (text) => `\x1b[2m${text}\x1b[0m`;
 const bold = (text) => `\x1b[1m${text}\x1b[0m`;
 
 /**
- * Selects from the two FallaMercury-supported agent tools.
+ * Selects from the two CustomWorkFlow-supported agent tools.
  * Space toggles the active item, arrows move, Enter confirms.
  */
 export async function selectTools(tools) {

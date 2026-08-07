@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// FallaMercury PreToolUse hook.
+// CustomWorkFlow PreToolUse hook.
 //
 // Fires before the `Skill` tool runs. When the invoked skill is one of the
-// falla-* workflow skills, this hook loads the matching spec/ constraint
+// cwf-* workflow skills, this hook loads the matching spec/ constraint
 // documents and injects them into the model context so the skill can never run
 // without its architectural constraints in scope. Any other skill is passed
 // through untouched.
@@ -17,10 +17,10 @@ import path from 'node:path';
 
 // skill name -> spec files (relative to the spec dir) that must be in context.
 const SKILL_SPECS = {
-  'falla-preflight': ['[Must Read]soul.md', '[分析必读]preflight.md'],
-  'falla-propose': ['[Must Read]soul.md', '[架构必读]propose.md'],
-  'falla-apply-change': ['[Must Read]soul.md', '[模块选读]apply.md'],
-  'falla-archive-change': ['[Must Read]soul.md', '[任务选读]archive.md'],
+  'cwf-preflight': ['[Must Read]soul.md', '[分析必读]preflight.md'],
+  'cwf-propose': ['[Must Read]soul.md', '[架构必读]propose.md'],
+  'cwf-apply-change': ['[Must Read]soul.md', '[模块选读]apply.md'],
+  'cwf-archive-change': ['[Must Read]soul.md', '[任务选读]archive.md'],
 };
 
 function readStdin() {
@@ -53,7 +53,7 @@ function extractSkillName(payload) {
 /** Candidate spec directories, most specific first. */
 function specDirs(projectDir) {
   return [
-    path.join(projectDir, '.falla', 'spec'),
+    path.join(projectDir, '.customworkflow', 'spec'),
     path.join(projectDir, 'spec'),
   ];
 }
@@ -74,12 +74,12 @@ async function loadSpec(projectDir, relativeFile) {
 /**
  * Per-session marker file recording which spec files have already been injected
  * this session, so shared docs (e.g. soul.md) are not re-injected on every
- * falla-* skill call. Falls back to no dedup when there is no session id.
+ * cwf-* skill call. Falls back to no dedup when there is no session id.
  */
 function sessionMarkerPath(sessionId) {
   if (!sessionId) return null;
   const safeId = sessionId.toString().replace(/[^a-zA-Z0-9_-]/g, '_');
-  return path.join(os.tmpdir(), 'falla-spec-guard', `${safeId}.json`);
+  return path.join(os.tmpdir(), 'cwf-spec-guard', `${safeId}.json`);
 }
 
 async function readInjected(markerPath) {
@@ -116,7 +116,7 @@ async function main() {
   const skillName = extractSkillName(payload);
   const specFiles = SKILL_SPECS[skillName];
   if (!specFiles) {
-    // Not a falla workflow skill — do not interfere.
+    // Not a cwf workflow skill — do not interfere.
     process.exit(0);
   }
 
@@ -151,11 +151,11 @@ async function main() {
   }
 
   const header =
-    `【FallaMercury spec 约束 — 使用 ${skillName} 前必须遵守】\n` +
+    `【CustomWorkFlow spec 约束 — 使用 ${skillName} 前必须遵守】\n` +
     '以下是本阶段的强制约束文档，请在执行该 skill 时严格遵循：';
 
   const missingNote = missing.length
-    ? `\n\n（提示：未找到以下 spec 文件，请人工确认它们已随安装写入 .falla/spec/：${missing.join('、')}）`
+    ? `\n\n（提示：未找到以下 spec 文件，请人工确认它们已随安装写入 .customworkflow/spec/：${missing.join('、')}）`
     : '';
 
   const additionalContext =
@@ -175,7 +175,7 @@ async function main() {
   // Fallback for older versions that surface stderr on PreToolUse:
   // a short reminder pointing at the spec files.
   process.stderr.write(
-    `[FallaMercury] ${skillName} 前请阅读 .falla/spec 下：${pending.join('、')}\n`
+    `[CustomWorkFlow] ${skillName} 前请阅读 .customworkflow/spec 下：${pending.join('、')}\n`
   );
 
   // Record successfully-loaded files so they are not re-injected this session.

@@ -1,26 +1,26 @@
 ---
-name: falla-apply-change
+name: cwf-apply-change
 description: 实施 OpenSpec 变更中的任务。适用于用户希望开始实施、继续实施或逐项完成任务时。
-allowed-tools: Bash(falla:*)
+allowed-tools: Bash(cwf:*)
 license: MIT
-compatibility: 需要 falla CLI。
+compatibility: 需要 cwf CLI。
 metadata:
-  author: falla
+  author: cwf
   version: "1.0"
   generatedBy: "copied-from-OpenSpec"
 ---
 
 实施 OpenSpec 变更中的任务。
 
-**路径约束：** 所有 change、artifact 和归档均位于当前目标项目根目录的 `mercuryspec/` 下。所有 `falla` 命令必须在该项目根目录执行，不得写入 FallaMercury 包源码目录、父目录、相邻目录或全局 OpenSpec 安装中的工作区。
+**路径约束：** 所有 change、artifact 和归档均位于当前目标项目根目录的 `cwfspec/` 下。所有 `cwf` 命令必须在该项目根目录执行，不得写入 CustomWorkFlow 包源码目录、父目录、相邻目录或全局 OpenSpec 安装中的工作区。
 
 **输入：** 可选地指定变更名称。若省略，请判断能否从对话上下文推断；若表述模糊或存在歧义，**必须**提示用户选择可用变更。
 
 **步骤**
 
 0. **【强制】确保 spec 约束已在上下文中（不得跳过）**
-   - 全局必读：`.falla/spec/[Must Read]soul.md`（回退：`spec/[Must Read]soul.md`）
-   - 本阶段必读：`.falla/spec/[模块选读]apply.md`（回退：`spec/[模块选读]apply.md`）
+   - 全局必读：`.customworkflow/spec/[Must Read]soul.md`（回退：`spec/[Must Read]soul.md`）
+   - 本阶段必读：`.customworkflow/spec/[模块选读]apply.md`（回退：`spec/[模块选读]apply.md`）
    - **仅当上述约束尚未出现在当前上下文中时才去读取**（Claude 环境下 PreToolUse hook 通常已自动注入，此时不要重复读取以免浪费上下文）。
    - 未读取并理解上述约束前，**不得**进行后续任何步骤或实施任务。
 
@@ -29,13 +29,13 @@ metadata:
    如果提供了名称，直接使用。否则：
    - 如果用户提到某项变更，则从对话上下文推断
    - 若只有一项活跃变更，自动选择它
-   - 若存在歧义，运行 `falla list --json` 获取可用变更，并使用 **AskUserQuestion 工具**让用户选择
+   - 若存在歧义，运行 `cwf list --json` 获取可用变更，并使用 **AskUserQuestion 工具**让用户选择
 
    始终说明：“使用变更：<name>”，并告知如何覆盖选择（例如 `/opsx:apply <other>`）。
 
 2. **检查状态以了解 schema**
    ```bash
-   falla status --change "<name>" --json
+   cwf status --change "<name>" --json
    ```
    解析 JSON 以了解：
    - `schemaName`：正在使用的工作流（例如 `"spec-driven"`）
@@ -45,7 +45,7 @@ metadata:
 3. **获取 apply 指引**
 
    ```bash
-   falla instructions apply --change "<name>" --json
+   cwf instructions apply --change "<name>" --json
    ```
 
    该命令返回：
@@ -55,7 +55,7 @@ metadata:
    - 基于当前状态的动态指引
 
    **处理状态：**
-   - 若 `state: "blocked"`（缺少 artifact）：显示提示，并建议使用 falla-continue-change
+   - 若 `state: "blocked"`（缺少 artifact）：显示提示，并建议使用 cwf-continue-change
    - 若 `state: "all_done"`：告知用户已完成，并建议归档
    - 否则：继续实施
 

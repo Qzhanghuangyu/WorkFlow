@@ -107,8 +107,8 @@ function parseInlineList(value) {
 /** schema 优先级与 OpenSpec 一致：change metadata → 项目配置 → 默认值。 */
 export function resolveSchemaName(root, changeDir) {
   const metadata = readSchemaField(path.join(changeDir, '.openspec.yaml'));
-  const config = readSchemaField(path.join(root, 'mercuryspec', 'config.yaml'))
-    ?? readSchemaField(path.join(root, 'mercuryspec', 'config.yml'));
+  const config = readSchemaField(path.join(root, 'cwfspec', 'config.yaml'))
+    ?? readSchemaField(path.join(root, 'cwfspec', 'config.yml'));
   return metadata ?? config ?? 'spec-driven';
 }
 
@@ -121,7 +121,7 @@ function readSchemaField(file) {
 export function loadSchema(root, changeDir) {
   const schemaName = resolveSchemaName(root, changeDir);
   const candidates = [
-    path.join(root, 'mercuryspec', 'schemas', schemaName, 'schema.yaml'),
+    path.join(root, 'cwfspec', 'schemas', schemaName, 'schema.yaml'),
     path.join(PACKAGE_ROOT, 'schemas', schemaName, 'schema.yaml'),
   ];
   const schemaPath = candidates.find((candidate) => existsSync(candidate));
@@ -176,7 +176,7 @@ function getBuildOrder(artifacts) {
 
 /** 生成与 OpenSpec status 对齐的 artifact 状态、依赖和输出路径。 */
 export function getChangeStatus(root, changeName) {
-  const changeDir = path.join(root, 'mercuryspec', 'changes', changeName);
+  const changeDir = path.join(root, 'cwfspec', 'changes', changeName);
   if (!existsSync(changeDir)) throw new Error(`变更 '${changeName}' 不存在：${changeDir}`);
   const { schemaName, schema, schemaPath } = loadSchema(root, changeDir);
   const completed = new Set(schema.artifacts
@@ -204,7 +204,7 @@ export function getChangeStatus(root, changeName) {
     changeName,
     schemaName,
     schemaPath,
-    planningHome: { root, changesDir: path.join(root, 'mercuryspec', 'changes') },
+    planningHome: { root, changesDir: path.join(root, 'cwfspec', 'changes') },
     changeRoot: changeDir,
     artifactPaths,
     applyRequires: schema.apply.requires?.length ? schema.apply.requires : schema.artifacts.map((item) => item.id),

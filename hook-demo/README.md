@@ -1,7 +1,7 @@
 # hook-demo — 手动复现 Codex hook 验证
 
 这里是「验证结论」里三个测试样例的独立、可复跑版本。你可以逐个跑，看清
-FallaMercury 的 spec 约束是怎么通过 hook 进到 Codex 上下文的。
+CustomWorkFlow 的 spec 约束是怎么通过 hook 进到 Codex 上下文的。
 
 ## 前置
 
@@ -61,15 +61,15 @@ bash 03-e2e-install/run.sh
 ```
 
 **看什么：**
-- 用真正的 `falla-mercury install` 把 skills / spec / hook 装进一个新项目
+- 用真正的 `customworkflow install` 把 skills / spec / hook 装进一个新项目
   （`installed-project/`）。
-- 打印装好的 `.codex/config.toml`、`.codex/hooks/`、`.falla/spec/`。
+- 打印装好的 `.codex/config.toml`、`.codex/hooks/`、`.customworkflow/spec/`。
 - 然后在**安装好的项目里**跑 codex，问一个只在 `soul.md` 里的事实
   （「Figma→安卓大约百分之几无法自动对齐」），并**明确禁止读文件**。
 
 **预期结论：**
 - 模型回答 `20%` → 证明整条链路成立：
-  `falla install` → 写 `.codex/config.toml` 注册 hook → `falla-spec-session.mjs`
+  `cwf install` → 写 `.codex/config.toml` 注册 hook → `cwf-spec-session.mjs`
   → soul.md 注入会话上下文（模型没读任何文件也知道答案）。
 
 ---
@@ -77,11 +77,11 @@ bash 03-e2e-install/run.sh
 ## 涉及的真实代码（不是 demo 专用，是线上代码）
 
 - Hook 脚本模板：
-  - `../src/templates/hooks/falla-spec-guard.mjs`（Claude PreToolUse，按 skill 注入）
-  - `../src/templates/hooks/falla-spec-session.mjs`（Codex SessionStart，注入 soul.md）
+  - `../src/templates/hooks/cwf-spec-guard.mjs`（Claude PreToolUse，按 skill 注入）
+  - `../src/templates/hooks/cwf-spec-session.mjs`（Codex SessionStart，注入 soul.md）
 - 安装逻辑：`../src/init.js`
   - `installClaudeSpecHook()` / `installCodexSpecHook()` / `installSpecDocs()`
-- 约束文档源：`../spec/`（安装时拷到目标项目 `.falla/spec/`）
+- 约束文档源：`../spec/`（安装时拷到目标项目 `.customworkflow/spec/`）
 
 > Rig 1/2 用的是**独立的简化 hook**（只为演示机制）；Rig 3 用的是**仓库里真正会
 > 发布的代码**。三者结合，能完整看清「机制能不能用」+「我们的代码有没有正确用上它」。

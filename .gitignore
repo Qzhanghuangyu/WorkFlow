@@ -2,4 +2,6 @@
 node_modules/
 .claude/
 .codex/
-mercuryspec/
+cwfspec/
+
+.idea/

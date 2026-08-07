@@ -11,7 +11,7 @@
 
 ## 前置检查（不阻断，但必须提示）
 
-1. **Artifact 完成状态**——`falla status --change "<name>" --json`，若有 artifact 非 `done`，提示并让用户确认后再继续。
+1. **Artifact 完成状态**——`cwf status --change "<name>" --json`，若有 artifact 非 `done`，提示并让用户确认后再继续。
 2. **任务完成状态**——读取 `tasks.md`，统计 `- [ ]` / `- [x]`；若有未完成任务，提示并确认。
 3. **comate.md 状态**——确认该 change 的 `comate.md` 已标记 `done`；若还有未交接的卡点，先提示。
 4. **子 change 收敛**——若这是被拆分出的多个子 change，确认相互依赖的子 change 均已完成或已妥善交接。
@@ -21,7 +21,7 @@
 ## Delta Spec 同步
 
 - 用 status JSON 的 `artifactPaths.specs.existingOutputPaths` 判断是否存在 delta spec。
-- 若存在：把每个 delta spec 与主 spec（`mercuryspec/specs/<capability>/spec.md`）比较，汇总将应用的新增 / 修改 / 移除 / 重命名，提示后再同步。
+- 若存在：把每个 delta spec 与主 spec（`cwfspec/specs/<capability>/spec.md`）比较，汇总将应用的新增 / 修改 / 移除 / 重命名，提示后再同步。
 - 同步由 agent 驱动（`openspec-sync-specs` 方式）。
 
 ## 执行归档
@@ -32,8 +32,8 @@
 
 ## 对应 skill 与命令
 
-- Skill：`/falla:archive`
-- 关键命令：`falla list --json`、`falla status --change "<name>" --json`
+- Skill：`/cwf:archive`
+- 关键命令：`cwf list --json`、`cwf status --change "<name>" --json`
 
 ## 完成标准
 

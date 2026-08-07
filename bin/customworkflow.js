@@ -22,10 +22,10 @@ const skipLarkCli = args.includes('--skip-lark-cli');
 const targetPath = args.find((arg) => !arg.startsWith('--')) ?? process.cwd();
 
 if (command === '--help' || command === '-h') {
-  console.log('Usage: falla-mercury install [target-path] [--no-interactive] [--skip-figma-mcp] [--skip-lark-cli]');
-  console.log('       falla-mercury init [target-path] [--no-interactive] [--skip-figma-mcp] [--skip-lark-cli]');
+  console.log('Usage: customworkflow install [target-path] [--no-interactive] [--skip-figma-mcp] [--skip-lark-cli]');
+  console.log('       customworkflow init [target-path] [--no-interactive] [--skip-figma-mcp] [--skip-lark-cli]');
 } else if (command !== 'install' && command !== 'init') {
-  console.error('Usage: falla-mercury install [target-path] [--no-interactive] [--skip-figma-mcp] [--skip-lark-cli]');
+  console.error('Usage: customworkflow install [target-path] [--no-interactive] [--skip-figma-mcp] [--skip-lark-cli]');
   process.exitCode = 1;
 } else {
   try {
@@ -37,7 +37,7 @@ if (command === '--help' || command === '-h') {
     console.log(`Installed ${installedFiles.length} files:`);
     for (const file of installedFiles) console.log(`  ${file}`);
     console.log(
-      `${bold(cyan('spec 约束'))}: 已写入 .falla/spec/，并同步已有 openspec/specs/；` +
+      `${bold(cyan('spec 约束'))}: 已写入 .customworkflow/spec/，并同步已有 openspec/specs/；` +
         `${selectedTools.includes('claude') ? 'Claude 通过 PreToolUse hook 强制注入；' : ''}` +
         `${selectedTools.includes('codex') ? 'Codex 通过 SessionStart hook 注入 soul + AGENTS.md 引导（首次需在 Codex 中信任该 hook）。' : ''}`
     );
@@ -77,7 +77,7 @@ if (command === '--help' || command === '-h') {
       }
     }
   } catch (error) {
-    console.error(`Failed to install FallaMercury skills: ${error.message}`);
+    console.error(`Failed to install CustomWorkFlow skills: ${error.message}`);
     process.exitCode = 1;
   }
 }

@@ -1,9 +1,9 @@
 ---
-name: falla-preflight
-description: 在 falla-propose 前读取 PRD、创建 change，并把 PRD 中未明确的状态交互、边界异常和代码兼容性事项记录到 change 目录的 preflight.md。适用于用户开始一项新需求、希望先确认当前实现状态并留下需求分析记录时。
+name: cwf-preflight
+description: 在 cwf-propose 前读取 PRD、创建 change，并把 PRD 中未明确的状态交互、边界异常和代码兼容性事项记录到 change 目录的 preflight.md。适用于用户开始一项新需求、希望先确认当前实现状态并留下需求分析记录时。
 ---
 
-# Falla Preflight
+# CWF Preflight
 
 在 propose 前创建 change，并完成一次轻量的实现状态检查。此阶段不解决全部需求问题，只把 PRD 未明确事项如实记录到 `preflight.md`，供后续 propose 使用。
 
@@ -20,9 +20,9 @@ description: 在 falla-propose 前读取 PRD、创建 change，并把 PRD 中未
 
 ### 0. 加载约束
 
-- 若尚未在上下文中，读取 `.falla/spec/[Must Read]soul.md` 和 `.falla/spec/[分析必读]preflight.md`。
+- 若尚未在上下文中，读取 `.customworkflow/spec/[Must Read]soul.md` 和 `.customworkflow/spec/[分析必读]preflight.md`。
 - 对应文件不存在时，回退到 `spec/[Must Read]soul.md` 和 `spec/[分析必读]preflight.md`。
-- 按需读取 `.falla/spec/` 下与当前需求相关的项目约束。
+- 按需读取 `.customworkflow/spec/` 下与当前需求相关的项目约束。
 
 ### 1. 读取 PRD
 
@@ -33,12 +33,12 @@ description: 在 falla-propose 前读取 PRD、创建 change，并把 PRD 中未
 
 ### 2. 创建 change
 
-确认当前工作目录是正在分析的目标项目根目录。后续 `falla status`、`falla new change`、`falla instructions` 等命令必须始终在该项目根目录执行。
+确认当前工作目录是正在分析的目标项目根目录。后续 `cwf status`、`cwf new change`、`cwf instructions` 等命令必须始终在该项目根目录执行。
 
 先运行以下命令确认同名 change 是否已经存在：
 
 ```bash
-falla status --change "<name>" --json
+cwf status --change "<name>" --json
 ```
 
 若已存在且能够确认属于当前需求，复用 JSON 中的 `changeRoot`；若无法确认，询问用户是继续现有 change 还是更换名称。
@@ -46,10 +46,10 @@ falla status --change "<name>" --json
 不存在时运行：
 
 ```bash
-falla new change "<name>" --json
+cwf new change "<name>" --json
 ```
 
-从 JSON 的 `change.path` 获取 change 目录。不要自行猜测 `openspec/` 或 `mercuryspec/` 路径，也不要在父目录中搜索其他 OpenSpec 工作区。
+从 JSON 的 `change.path` 获取 change 目录。不要自行猜测 `openspec/` 或 `cwfspec/` 路径，也不要在父目录中搜索其他 OpenSpec 工作区。
 
 ### 3. 写入待澄清事项
 
@@ -63,11 +63,11 @@ falla new change "<name>" --json
 - change 名称和目录
 - `preflight.md` 路径
 - 根据 `[分析必读]preflight.md` 约束分析的摘要
-- 下一步可以运行 `falla-propose`
+- 下一步可以运行 `cwf-propose`
 
 ## 约束
 
-- `falla new change` 只在 preflight 阶段执行。
+- `cwf new change` 只在 preflight 阶段执行。
 - 必须创建 `preflight.md`，即使未明确事项均为“无”。
 - 此阶段只确认功能实现状态并记录未明确事项，不创建 proposal、specs、design 或 tasks。
 - 不修改业务代码，不把推断写成事实。

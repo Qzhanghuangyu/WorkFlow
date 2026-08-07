@@ -5,7 +5,7 @@ Preflight 位于 propose 之前，职责限定为：创建 change、确认 PRD �
 ## 1. 强制流程
 
 1. 完整读取 PRD，获得 change 名称和需求范围。
-2. 在 preflight 阶段执行 `falla new change`；后续 propose 不得创建 change。
+2. 在 preflight 阶段执行 `cwf new change`；后续 propose 不得创建 change。
 3. 只读取与当前需求直接相关的代码和文档。不得为了“全面了解项目”无边界扫描整个仓库。
 4. 用具体文件、符号、接口或测试支撑实现状态结论。
 5. 在 change 根目录创建 `preflight.md`，记录实现状态和 PRD 未明确事项。

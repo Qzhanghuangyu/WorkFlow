@@ -22,7 +22,7 @@ artifacts:
       - **变更内容**：用列表具体说明新增能力、修改或移除内容；破坏性变更标记为 **BREAKING**。
       - **能力**：识别需要新建或修改的规格：
         - **新增能力**：列出引入的能力；每项对应 `specs/<名称>/spec.md`，名称使用 kebab-case，例如 `user-auth`、`data-export`。
-        - **修改能力**：仅列出需求级行为发生变化的既有能力，不要列纯实现调整；每项需要 delta spec。先检查 `mercuryspec/specs/` 中已有名称；没有需求变化则留空。
+        - **修改能力**：仅列出需求级行为发生变化的既有能力，不要列纯实现调整；每项需要 delta spec。先检查 `cwfspec/specs/` 中已有名称；没有需求变化则留空。
       - **影响范围**：受影响的代码、API、依赖或系统。
 
       **重要：**“能力”章节是 proposal 与 specs 阶段之间的契约。填写前先调研已有规格；列出的每项能力都必须有对应 spec 文件。
@@ -57,7 +57,7 @@ artifacts:
 
       为 proposal 的“能力”章节中每一项能力创建一个 spec 文件：
       - 新增能力：使用 proposal 中完全一致的 kebab-case 名称，路径为 `specs/<能力>/spec.md`。
-      - 修改能力：从 `mercuryspec/specs/<能力>/` 找到既有文件夹名称，并在 `specs/<能力>/spec.md` 创建 delta spec。
+      - 修改能力：从 `cwfspec/specs/<能力>/` 找到既有文件夹名称，并在 `specs/<能力>/spec.md` 创建 delta spec。
 
       Delta 操作（使用 `##` 标题）：
       - **ADDED Requirements**：新增能力。
@@ -72,7 +72,7 @@ artifacts:
       - **关键：**场景必须恰好使用四个井号（`####`）；三个井号或普通列表不会被正确识别。
       - 每项需求至少包含一个场景。
 
-      修改既有需求时：先从 `mercuryspec/specs/<能力>/spec.md` 定位需求；复制从 `### Requirement:` 到全部场景的完整区块；粘贴到 `## MODIFIED Requirements` 下后再修改；标题文本必须保持一致（忽略空白）。
+      修改既有需求时：先从 `cwfspec/specs/<能力>/spec.md` 定位需求；复制从 `### Requirement:` 到全部场景的完整区块；粘贴到 `## MODIFIED Requirements` 下后再修改；标题文本必须保持一致（忽略空白）。
 
       不要用不完整内容修改既有需求，否则归档时会丢失细节；若只是新增关注点而未改变既有行为，应使用 ADDED。
       规格必须可测试，每个场景都应能对应一个潜在测试用例。

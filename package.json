@@ -1,17 +1,17 @@
 {
-  "name": "falla-mercury",
+  "name": "customworkflow",
   "version": "0.1.0",
   "private": true,
-  "description": "FallaMercury project skill installer",
+  "description": "CustomWorkFlow project skill installer",
   "type": "module",
   "bin": {
-    "falla-mercury": "./bin/falla-mercury.js",
-    "falla": "./bin/mercury.js",
-    "mercury": "./bin/mercury.js"
+    "customworkflow": "./bin/customworkflow.js",
+    "cwf": "./bin/cwf.js"
   },
   "scripts": {
-    "build": "node --check bin/falla-mercury.js && node --check bin/mercury.js && node --check src/init.js && node --check src/ui/figma-mcp.js && node --check src/ui/lark-cli.js && node --check src/mercury/new-change.js && node --check src/mercury/artifact-graph.js && node --check src/templates/hooks/falla-spec-guard.mjs && node --check src/templates/hooks/falla-spec-session.mjs",
+    "build": "node --check bin/customworkflow.js && node --check bin/cwf.js && node --check src/init.js && node --check src/ui/figma-mcp.js && node --check src/ui/lark-cli.js && node --check src/mercury/new-change.js && node --check src/mercury/artifact-graph.js && node --check src/templates/hooks/cwf-spec-guard.mjs && node --check src/templates/hooks/cwf-spec-session.mjs",
     "install": "npm link --ignore-scripts",
     "test": "node --test"
   }
 }
+
