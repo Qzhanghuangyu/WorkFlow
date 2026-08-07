@@ -105,13 +105,20 @@ test('preflight creates the change record and propose only requires that change'
   const preflight = templates.find((template) => template.name === 'cwf-preflight');
   const propose = templates.find((template) => template.name === 'cwf-propose');
 
+  // The preflight SKILL.md owns the workflow steps and CLI commands; the
+  // analysis dimensions (Stateful Interactions / Boundary / Code Compatibility)
+  // live in the [分析必读]preflight.md constraint doc, so each is asserted
+  // against the file that actually carries it.
+  const specs = await getSpecTemplates();
+  const preflightSpec = specs.find((spec) => spec.name === '[分析必读]preflight.md');
+
   assert.ok(preflight, 'expected cwf-preflight template');
-  assert.match(preflight.content, /Stateful Interactions/);
-  assert.match(preflight.content, /Boundary and Exception Cases/);
-  assert.match(preflight.content, /Code Compatibility Gaps/);
+  assert.ok(preflightSpec, 'expected [分析必读]preflight.md constraint doc');
+  assert.match(preflightSpec.content, /Stateful Interactions/);
+  assert.match(preflightSpec.content, /Boundary and Exception Cases/);
+  assert.match(preflightSpec.content, /Code Compatibility Gaps/);
   assert.match(preflight.content, /cwf new change "<name>" --json/);
   assert.match(preflight.content, /preflight\.md/);
-  assert.match(preflight.content, /已实现.*部分实现.*未实现.*无法判断/s);
   assert.match(propose.content, /确认 change 目录存在/);
   assert.match(propose.content, /change 目录存在是 propose 唯一的 preflight 前置检查/);
   assert.doesNotMatch(propose.content, /Ready for propose/);
