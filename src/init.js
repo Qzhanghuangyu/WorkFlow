@@ -252,8 +252,9 @@ const AGENTS_SECTION = `${AGENTS_MARKER}
 - 规划 / 拆解（propose）：\`.customworkflow/spec/[架构必读]propose.md\`
 - 实施（apply）：\`.customworkflow/spec/[模块选读]apply.md\`
 - 归档（archive）：\`.customworkflow/spec/[任务选读]archive.md\`
+- UI 控件映射（propose 拆控件 / apply 实施 UI 时必读）：\`.customworkflow/spec/[UI控件必读]ui-components.md\`
 
-前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读。
+前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读，\`[UI控件必读]\`=涉及 UI 控件的拆解与实施时必读。
 未读取并理解约束前，不得执行对应 skill 的后续步骤。
 `;
 

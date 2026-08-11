@@ -18,8 +18,8 @@ import path from 'node:path';
 // skill name -> spec files (relative to the spec dir) that must be in context.
 const SKILL_SPECS = {
   'cwf-preflight': ['[Must Read]soul.md', '[分析必读]preflight.md'],
-  'cwf-propose': ['[Must Read]soul.md', '[架构必读]propose.md'],
-  'cwf-apply-change': ['[Must Read]soul.md', '[模块选读]apply.md'],
+  'cwf-propose': ['[Must Read]soul.md', '[架构必读]propose.md', '[UI控件必读]ui-components.md'],
+  'cwf-apply-change': ['[Must Read]soul.md', '[模块选读]apply.md', '[UI控件必读]ui-components.md'],
   'cwf-archive-change': ['[Must Read]soul.md', '[任务选读]archive.md'],
 };
 

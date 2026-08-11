@@ -41,6 +41,7 @@
 - 开始前读取 apply 指引输出中 `contextFiles` 列出的文件（proposal / specs / design / tasks），不要假定文件名。
 - 逐项完成 `tasks.md` 中的任务，完成一项立即把 `- [ ]` 改为 `- [x]`。
 - 保持每次改动最小且聚焦于当前任务。
+- **实施命中 `[UI控件必读]ui-components.md` 的控件时，必须按其「指定实现」与「官方标准用法」落地**（例如 tab 用 MagicIndicator，不得改用 TabLayout 或手撸）；项目中已有同类实现的，照其结构落地。若命中「需人工裁定的情况」，暂停并交用户裁定，不要自行发挥。
 - UI 实施只搭框架、不死磕像素级对齐（见 [Must Read] soul.md 信条一）；把无法自动对齐的部分在 `comate.md` 的交接里标注给人工。
 
 ## 何时暂停
