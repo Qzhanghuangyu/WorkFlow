@@ -15,7 +15,7 @@
 | `[架构必读]` | 架构级约束 | 涉及「规划 / 拆解一个 change」时必读 |
 | `[模块选读]` | 模块级约束 | 实施某个模块 / 子 change 时按需读 |
 | `[任务选读]` | 单任务级约束 | 处理该具体环节（如归档）时才读 |
-| `[UI控件必读]` | UI 控件映射库 | 涉及 UI 控件的拆解（propose）与实施（apply）时必读 |
+| `[UI控件必读]` | UI 控件映射库路由入口 | 涉及 UI 控件的拆解（propose）与实施（apply）时必读；读它做分流，再按路由读 `ui-components/` 下对应大类明细 |
 
 当前 spec 目录：
 
@@ -24,7 +24,7 @@
 - `[架构必读] propose.md` —— 提案与任务拆解阶段的约束（MVVM 拆解、拓扑依赖）。
 - `[模块选读] apply.md` —— 实施与协作分派阶段（多 change 拆分、`comate.md` 责任台账）。
 - `[任务选读] archive.md` —— 归档阶段的约束。
-- `[UI控件必读] ui-components.md` —— UI 控件映射约定库（UI 模式 → 指定实现，如 tab → MagicIndicator）。
+- `[UI控件必读] ui-components.md` —— UI 控件映射约定库的**路由入口**（通用规则 + 大类路由表；UI 模式 → 指定实现，如 tab → MagicIndicator）。具体实现按大类拆在同目录 `ui-components/` 下（如 `ui-components/tab-导航-banner.md`），命中哪个大类只读哪个。
 
 > 读取原则：先读本文确定当前处于哪个阶段，再按前缀只加载对应阶段的文档。
 

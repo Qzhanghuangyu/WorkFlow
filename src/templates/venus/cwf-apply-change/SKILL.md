@@ -21,7 +21,7 @@ metadata:
 0. **【强制】确保 spec 约束已在上下文中（不得跳过）**
    - 全局必读：`.customworkflow/spec/[Must Read]soul.md`（回退：`spec/[Must Read]soul.md`）
    - 本阶段必读：`.customworkflow/spec/[模块选读]apply.md`（回退：`spec/[模块选读]apply.md`）
-   - UI 控件必读：`.customworkflow/spec/[UI控件必读]ui-components.md`（回退：`spec/[UI控件必读]ui-components.md`）
+   - UI 控件必读（路由入口）：`.customworkflow/spec/[UI控件必读]ui-components.md`（回退：`spec/[UI控件必读]ui-components.md`）；实施 UI 控件时，按其大类路由表再读 `ui-components/` 下命中的大类明细
    - **仅当上述约束尚未出现在当前上下文中时才去读取**（Claude 环境下 PreToolUse hook 通常已自动注入，此时不要重复读取以免浪费上下文）。
    - 未读取并理解上述约束前，**不得**进行后续任何步骤或实施任务。
 

@@ -53,15 +53,20 @@ export async function getSkillTemplates() {
   ).then((templates) => templates.sort((a, b) => a.name.localeCompare(b.name)));
 }
 
-/** Returns the spec constraint documents bundled with CustomWorkFlow, sorted by name. */
+/**
+ * Returns the spec constraint documents bundled with CustomWorkFlow, sorted by
+ * name. Scans recursively so grouped libraries (e.g. `ui-components/*.md`) are
+ * included; `name` is the path relative to the spec template dir and may contain
+ * subdirectories.
+ */
 export async function getSpecTemplates() {
-  const entries = await readdir(specTemplateDirectory, { withFileTypes: true });
+  const relativePaths = await listFilesRecursively(specTemplateDirectory);
   return Promise.all(
-    entries
-      .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
-      .map(async (entry) => ({
-        name: entry.name,
-        content: await readFile(path.join(specTemplateDirectory, entry.name), 'utf8'),
+    relativePaths
+      .filter((relativePath) => relativePath.endsWith('.md'))
+      .map(async (relativePath) => ({
+        name: relativePath,
+        content: await readFile(path.join(specTemplateDirectory, relativePath), 'utf8'),
       }))
   ).then((specs) => specs.sort((a, b) => a.name.localeCompare(b.name)));
 }
@@ -80,6 +85,7 @@ export async function installSpecDocs(root) {
   await mkdir(targetDir, { recursive: true });
   for (const spec of specs) {
     const target = path.join(targetDir, spec.name);
+    await mkdir(path.dirname(target), { recursive: true });
     await writeFile(target, spec.content, 'utf8');
     written.push(target);
   }
@@ -252,9 +258,9 @@ const AGENTS_SECTION = `${AGENTS_MARKER}
 - 规划 / 拆解（propose）：\`.customworkflow/spec/[架构必读]propose.md\`
 - 实施（apply）：\`.customworkflow/spec/[模块选读]apply.md\`
 - 归档（archive）：\`.customworkflow/spec/[任务选读]archive.md\`
-- UI 控件映射（propose 拆控件 / apply 实施 UI 时必读）：\`.customworkflow/spec/[UI控件必读]ui-components.md\`
+- UI 控件映射（propose 拆控件 / apply 实施 UI 时必读，先读路由入口）：\`.customworkflow/spec/[UI控件必读]ui-components.md\`；命中大类后再读 \`.customworkflow/spec/ui-components/<大类>.md\`
 
-前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读，\`[UI控件必读]\`=涉及 UI 控件的拆解与实施时必读。
+前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读，\`[UI控件必读]\`=UI 控件路由入口（必读，再按路由读 \`ui-components/\` 下对应大类明细）。
 未读取并理解约束前，不得执行对应 skill 的后续步骤。
 `;
 
