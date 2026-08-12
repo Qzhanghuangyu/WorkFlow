@@ -24,12 +24,15 @@ description: 在 cwf-propose 前读取 PRD、创建 change，并把 PRD 中未�
 - 对应文件不存在时，回退到 `spec/[Must Read]soul.md` 和 `spec/[分析必读]preflight.md`。
 - 按需读取 `.customworkflow/spec/` 下与当前需求相关的项目约束。
 
-### 1. 读取 PRD
+### 1. 读取 PRD 与设计稿
 
 - 使用当前环境可用的文档能力读取完整 PRD，不要只依据标题或摘要。
+- **若输入包含 Figma / 设计稿链接（`figma.com/file`、`figma.com/design`、`figma.com/proto` 等），必须先调用 `figma-use` skill，通过 Figma MCP 读取真实结构化设计数据（图层结构、文本、尺寸间距、颜色、组件与变量等）**，再与 PRD 综合分析。见 `[分析必读]preflight.md` 第 1.1 节。
+  - **严禁仅凭截图、缩略图或链接预览图判断设计内容。**
+  - Figma MCP 未授权 / 不可用时，先按 skill 指引完成授权；仍不可用则停止并请用户提供可读取的设计数据，不要退回到截图猜测。
 - 提取需求目标、功能范围、主要交互、数据、接口和验收描述。
 - 区分 PRD 明确内容与推断；不要用常识补写产品决定。
-- 若 PRD 无法访问，停止并请求用户提供可读取内容。
+- 若 PRD 或设计稿无法访问，停止并请求用户提供可读取内容。
 
 ### 2. 创建 change
 
@@ -71,3 +74,4 @@ cwf new change "<name>" --json
 - 必须创建 `preflight.md`，即使未明确事项均为“无”。
 - 此阶段只确认功能实现状态并记录未明确事项，不创建 proposal、specs、design 或 tasks。
 - 不修改业务代码，不把推断写成事实。
+- 需求含 Figma / 设计稿链接时，必须用 `figma-use` skill 经 Figma MCP 读取真实设计数据，严禁仅凭截图判断，并与 PRD 综合分析。

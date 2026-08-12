@@ -28,6 +28,16 @@
 
 > 读取原则：先读本文确定当前处于哪个阶段，再按前缀只加载对应阶段的文档。
 
+## ★ 通用约束：设计稿一律经 Figma MCP 读取（贯穿所有阶段）
+
+> 本约束**不限阶段、不限时机**——无论在 preflight 分析、propose 拆解还是 apply 实施，只要收到 Figma / 设计稿链接就适用。
+
+- 收到 Figma 链接（`figma.com/file`、`figma.com/design`、`figma.com/proto` 等）时，**必须调用 `figma-use` skill，经 Figma MCP 读取真实结构化设计数据**：图层 / 节点结构、文本内容、尺寸与间距、颜色、组件与变量、约束与自动布局等。
+- **严禁仅凭截图、缩略图或链接预览图判断设计内容**——截图丢失结构、尺寸、状态与命名，据此判断必然不准确。
+- Figma MCP **未授权 / 不可用 / 链接无法访问时**：先按 skill 指引完成授权（如 OAuth）；仍不可用则**停止并请用户提供可读取的设计数据**，不要退回到截图猜测。
+- 读到设计数据后，与 PRD / 需求描述**综合分析**：以 Figma 结构化数据为「界面事实」，PRD 为「意图与规则」，二者对照。
+- 各阶段的具体用法：分析阶段见 `[分析必读]preflight.md` 第 1.1 节；拆解与实施阶段把 Figma 结构化数据作为 UI 控件识别（配合 `[UI控件必读]ui-components.md`）与还原的事实来源。
+
 ## 1. 我们是谁
 
 CustomWorkFlow 是在 [OpenSpec](https://github.com/) SDD（Spec-Driven Development，规格驱动开发）思路上改造而来的**任务拆解和SDD框架**，专门面向 **Android / 移动端** 工程。
