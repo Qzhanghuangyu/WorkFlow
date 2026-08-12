@@ -36,6 +36,32 @@
 - 状态变化、遇到阻塞、需要交接时，及时更新 `comate.md`。
 - 依赖 / 被依赖字段必须与 propose 阶段的拓扑关系一致。
 
+## 并行窗口同步（多人 / 多 agent 同时做一个 change）
+
+一个 change 常被拆成多个子 change，分给**不同窗口（会话 / 人 / agent）并行 apply**。**文档即记忆，窗口之间靠 change 目录文件 + git 同步——没有跨会话的实时推送。**
+
+> ⚠️ **git 操作（pull / commit / push）不自动执行，须人工完成或用户确认**（见 [Must Read] soul.md 全局约束）。agent 只负责**写文件**和**提示需要同步**，把 git 动作交给人。
+
+因此必须守住：
+
+1. **认领前先同步**：认领某子 change 前，**提示用户先 `git pull`**（由用户执行或确认）；拉到最新后再读该 change 的 `comate.md` 与 change 根 `decisions.md`（若有），了解已定决策与卡点，避免撞车 / 重复决策。
+2. **决策即落盘**：做出**影响其他子 change 的关键决策**、或**被用户纠正的点**时——把它写进本子 change 的 `comate.md` 交接；**跨子 change 的共享决策**写进 change 根 `decisions.md`（见下）。写文件可直接做；写完后**提示用户「这些改动需要提交同步」**，由用户 commit / push，不要自动执行。
+3. **阶段边界重读**：完成一个子任务、接下一个前，重读 `comate.md` / `decisions.md`——**已在运行的会话，其上下文是开工时冻结的，不会自动刷新**，靠重读才能拿到隔壁窗口的新决策（重读前可提示用户 pull 以拿到远端最新）。
+4. **归档时上升**：这些 change-local 决策里，能升级成通用规则的，在归档「经验萃取」时提炼进 `spec/`（见 `[任务选读]archive.md`）；其余随目录归档留痕。
+
+### change 根 `decisions.md`（可选，跨子 change 共享决策台账）
+
+当多个子 change 需要共享同一决策时，在 change 根维护一份 **append-only** 的 `decisions.md`（append 减少并行写冲突）：
+
+```markdown
+## <日期> <决策一句话>
+
+- 决策：<定了什么>
+- Why：<为什么>
+- 影响：<涉及哪些子 change>
+- 决定人：<owner>
+```
+
 ## 实施规则
 
 - 开始前读取 apply 指引输出中 `contextFiles` 列出的文件（proposal / specs / design / tasks），不要假定文件名。

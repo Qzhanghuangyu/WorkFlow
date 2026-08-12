@@ -75,7 +75,16 @@ metadata:
 
    若用户选择同步，使用 Task 工具（subagent_type: `"general-purpose"`，prompt：`"使用 Skill 工具为变更 '<name>' 调用 openspec-sync-specs。Delta spec 分析：<包含已分析的 delta spec 摘要>"`）。无论选择如何，均继续执行归档。
 
-5. **执行归档**
+5. **经验萃取（归档前必做）**
+
+   在把目录移入 archive **之前**，按 `[任务选读]archive.md`「经验萃取」小节沉淀本轮经验：
+   - 回顾来源：各子 change 的 `comate.md` 交接、change 根 `decisions.md`（若有）、本次与用户的纠正对话。
+   - 逐条分类：一次性（丢弃）/ 项目事实（记入参考实现或项目知识）/ 通用规则（升级）。
+   - 通用规则按位置路由沉淀：UI 选型→`[UI控件必读]`对应大类；分析盲点→`[分析必读]preflight.md`；实施规范→`[模块选读]apply.md`；跨切面→`[经验必读]lessons.md`。
+   - 遵守写入纪律（蒸馏优先于追加、去重/覆盖/删除、Why+How）；**规范类用 AskUserQuestion 让用户确认后再写**。
+   - 无可沉淀时，记「本轮无通用经验可沉淀」，不强行造条目。
+
+6. **执行归档**
 
    若不存在，在 `planningHome.changesDir` 下创建 `archive` 目录：
    ```bash
@@ -92,13 +101,14 @@ metadata:
    mv "<changeRoot>" "<planningHome.changesDir>/archive/YYYY-MM-DD-<name>"
    ```
 
-6. **展示摘要**
+7. **展示摘要**
 
    展示归档完成摘要，包括：
    - 变更名称
    - 使用的 schema
    - 归档位置
    - spec 是否已同步（如适用）
+   - 经验沉淀情况（沉淀了哪些通用规则到哪个文档，或「无可沉淀」）
    - 任何警告的说明（未完成的 artifact/任务）
 
 **成功时的输出**
@@ -115,6 +125,7 @@ metadata:
 ```
 
 **约束**
+- 归档前必须完成「经验萃取」（见 `[任务选读]archive.md`）；规范类经验须经用户确认后才写入 `spec/`，无可沉淀时明确记录
 - 未提供变更时，始终提示用户选择
 - 使用 artifact 图（`cwf status --json`）检查完成状态
 - 不要因警告而阻止归档——只需告知并确认

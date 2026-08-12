@@ -259,11 +259,14 @@ const AGENTS_SECTION = `${AGENTS_MARKER}
 - 实施（apply）：\`.customworkflow/spec/[模块选读]apply.md\`
 - 归档（archive）：\`.customworkflow/spec/[任务选读]archive.md\`
 - UI 控件映射（propose 拆控件 / apply 实施 UI 时必读，先读路由入口）：\`.customworkflow/spec/[UI控件必读]ui-components.md\`；命中大类后再读 \`.customworkflow/spec/ui-components/<大类>.md\`
+- 团队经验沉淀（propose / apply / archive 必读，跨切面兜底）：\`.customworkflow/spec/[经验必读]lessons.md\`
 
-前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读，\`[UI控件必读]\`=UI 控件路由入口（必读，再按路由读 \`ui-components/\` 下对应大类明细）。
+前缀含义：\`[Must Read]\`=全局必读，\`[分析必读]\`=PRD 分析阶段必读，\`[架构必读]\`=拆解阶段必读，\`[模块选读]\`=实施按需读，\`[任务选读]\`=对应环节才读，\`[UI控件必读]\`=UI 控件路由入口（必读，再按路由读 \`ui-components/\` 下对应大类明细），\`[经验必读]\`=团队经验沉淀库兜底（反复纠正蒸馏成的跨切面通用规则）。
 未读取并理解约束前，不得执行对应 skill 的后续步骤。
 
 **★ 通用约束（不限阶段，任何时候拿到 Figma 链接都适用）：** 收到 Figma / 设计稿链接（\`figma.com/file|design|proto\`）时，**必须调用 \`figma-use\` skill 经 Figma MCP 读取真实结构化设计数据**（图层结构 / 文本 / 尺寸间距 / 颜色 / 组件与变量），**严禁仅凭截图或预览图判断**；MCP 未授权则先授权，仍不可用就停止并请用户提供可读数据。详见 \`[Must Read]soul.md\`。
+
+**★ 通用约束（git）：** \`pull\` / \`push\` / \`commit\` / \`merge\` 等 git 操作**不得自动执行**，须人工完成或经用户明确确认；agent 只负责写文件与提示需要同步。详见 \`[Must Read]soul.md\`。
 `;
 
 /**

@@ -18,9 +18,9 @@ const GLOBAL_SPEC = '[Must Read]soul.md';
 // Per-phase docs the model should read when it runs each skill.
 const PHASE_SPECS = [
   ['cwf-preflight', '[分析必读]preflight.md'],
-  ['cwf-propose', '[架构必读]propose.md 与 [UI控件必读]ui-components.md'],
-  ['cwf-apply-change', '[模块选读]apply.md 与 [UI控件必读]ui-components.md'],
-  ['cwf-archive-change', '[任务选读]archive.md'],
+  ['cwf-propose', '[架构必读]propose.md、[UI控件必读]ui-components.md 与 [经验必读]lessons.md'],
+  ['cwf-apply-change', '[模块选读]apply.md、[UI控件必读]ui-components.md 与 [经验必读]lessons.md'],
+  ['cwf-archive-change', '[任务选读]archive.md 与 [经验必读]lessons.md'],
 ];
 
 function readStdin() {
