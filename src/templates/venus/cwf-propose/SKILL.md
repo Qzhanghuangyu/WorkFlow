@@ -41,14 +41,22 @@ metadata:
 
    **重要：** 未理解用户希望构建的内容前，不得继续。
 
-3. **获取 artifact 构建顺序**
+3. **【强制】选择架构模式（MVVM / MVI）**
+
+   拆解第一刀依赖架构模式（见 `[架构必读]propose.md` 拆解规则 1）。使用 **AskUserQuestion 工具**让用户选择本 change 用哪种模式，**不得擅自默认**：
+   - **MVVM**：View 任务 ＋ ViewModel 任务；契约 = ViewModel 暴露的可观察数据 / 状态。
+   - **MVI**：View 任务（渲染唯一不可变 State、发出 Intent）＋ State/Reducer 任务（Intent → State 单向数据流）；契约 = State 数据类 + Intent 事件集。
+
+   将用户选定的模式记入 `design.md`（在其分层说明中写明选用 MVVM 还是 MVI，及对应的两大任务与契约载体）；后续 `tasks.md` 的第一刀切分与 apply 实施都按此模式进行。
+
+4. **获取 artifact 构建顺序**
 
    使用步骤 1 的 status JSON，并解析：
    - `applyRequires`：实施前所需 artifact ID 数组
    - `artifacts`：全部 artifact 及其状态和依赖项
    - `artifactPaths`：每个 artifact 的已解析路径
 
-4. **按顺序创建 artifact，直至可 apply**
+5. **按顺序创建 artifact，直至可 apply**
 
    使用 **TodoWrite 工具**跟踪 artifact 创建进度。
 
@@ -73,7 +81,7 @@ metadata:
       - 使用 **AskUserQuestion 工具**澄清。
       - 将 `preflight.md` 中仍未明确的事项作为问题来源，但不要因其存在而整体阻塞所有 artifact。
 
-5. **展示最终状态**
+6. **展示最终状态**
 
    ```bash
    cwf status --change "<name>"
