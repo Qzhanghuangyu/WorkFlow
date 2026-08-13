@@ -30,7 +30,7 @@ metadata:
    ```
 
    - 若命令返回 change 不存在或错误，停止并提示用户先运行 `cwf-preflight`。不得在 propose 中运行 `cwf new change`。
-   - 若存在，从 JSON 读取 `changeRoot`、`planningHome`、`artifactPaths` 和 `actionContext`，后续始终使用这些解析路径。
+   - 若存在，从 JSON 读取 `changeRoot`、`planningHome` 和 `artifactPaths`，后续始终使用这些解析路径。
    - 若 `<changeRoot>/preflight.md` 存在，读取它作为需求与代码现状的补充上下文；文件不存在不阻塞 propose。
    - change 目录存在是 propose 唯一的 preflight 前置检查；不要增加额外准备状态门禁，也不要强制清空未明确事项。
 

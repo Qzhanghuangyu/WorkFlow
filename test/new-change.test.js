@@ -81,6 +81,30 @@ test('the cwf executable returns machine-readable change details in its configur
   }
 });
 
+test('the cwf executable lists changes and returns apply instructions', async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), 'customworkflow-openspec-'));
+  const cwf = path.join(process.cwd(), 'bin', 'cwf.js');
+  const env = { ...process.env, CWF_HOME: root };
+  try {
+    await execFileAsync(process.execPath, [cwf, 'new', 'change', 'add-auth'], { cwd: root, env });
+
+    const listResult = await execFileAsync(process.execPath, [cwf, 'list', '--json'], { cwd: root, env });
+    const list = JSON.parse(listResult.stdout);
+    assert.deepEqual(list.changes.map((change) => change.id), ['add-auth']);
+
+    const applyResult = await execFileAsync(
+      process.execPath,
+      [cwf, 'instructions', 'apply', '--change', 'add-auth', '--json'],
+      { cwd: root, env }
+    );
+    const apply = JSON.parse(applyResult.stdout);
+    assert.equal(apply.state, 'blocked');
+    assert.deepEqual(apply.missingArtifacts, ['tasks']);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
 test('defaults the CLI planning root to the current project directory', async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'customworkflow-project-'));
   const moduleUrl = pathToFileURL(

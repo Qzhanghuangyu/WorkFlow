@@ -211,3 +211,76 @@ export function getChangeStatus(root, changeName) {
     artifacts,
   };
 }
+
+/** 列出当前项目下所有活跃（未归档）的 change 及其 schema 与 artifact 状态。 */
+export function listChanges(root) {
+  const changesDir = path.join(root, 'cwfspec', 'changes');
+  if (!existsSync(changesDir)) return [];
+  return readdirSync(changesDir, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name !== 'archive')
+    .map((entry) => {
+      try {
+        const status = getChangeStatus(root, entry.name);
+        return {
+          id: entry.name,
+          schema: status.schemaName,
+          artifacts: status.artifacts.map((artifact) => ({ id: artifact.id, status: artifact.status })),
+        };
+      } catch (error) {
+        return { id: entry.name, schema: null, error: error.message };
+      }
+    })
+    .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+/**
+ * 生成 apply 阶段的动态指引：需读取的上下文文件、任务进度和当前状态。
+ * 与 artifact 的 `cwf instructions <id>` 不同，apply 关注的是读取已有 artifact
+ * 并跟踪 `schema.apply.tracks` 指向文件里的 checkbox 任务。
+ */
+export function getApplyInstructions(root, changeName) {
+  const status = getChangeStatus(root, changeName);
+  const { schema } = loadSchema(root, status.changeRoot);
+
+  const missingArtifacts = status.applyRequires.filter((id) => {
+    const artifact = status.artifacts.find((item) => item.id === id);
+    return !artifact || artifact.status !== 'done';
+  });
+
+  const contextFiles = {};
+  for (const artifact of status.artifacts) {
+    contextFiles[artifact.id] = status.artifactPaths[artifact.id].existingOutputPaths;
+  }
+
+  const taskFiles = schema.apply.tracks
+    ? resolveArtifactOutputs(status.changeRoot, schema.apply.tracks)
+    : [];
+  const tasks = [];
+  for (const file of taskFiles) {
+    for (const line of readFileSync(file, 'utf8').split('\n')) {
+      const match = line.match(/^\s*-\s*\[([ xX])\]\s+(.*\S)\s*$/);
+      if (match) tasks.push({ done: match[1].toLowerCase() === 'x', text: match[2] });
+    }
+  }
+  const completed = tasks.filter((task) => task.done).length;
+  const total = tasks.length;
+
+  let state;
+  if (missingArtifacts.length) state = 'blocked';
+  else if (total > 0 && completed === total) state = 'all_done';
+  else state = 'in_progress';
+
+  return {
+    change: changeName,
+    schemaName: status.schemaName,
+    changeRoot: status.changeRoot,
+    planningHome: status.planningHome,
+    state,
+    contextFiles,
+    missingArtifacts,
+    taskFiles,
+    progress: { total, completed, remaining: total - completed },
+    tasks,
+    instruction: schema.apply.instruction ?? '读取上下文文件，逐项完成未完成任务，并及时标记为已完成。',
+  };
+}

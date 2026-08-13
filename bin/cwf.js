@@ -2,14 +2,29 @@
 
 import path from 'node:path';
 import { createChange, getPlanningRoot, validateChangeName } from '../src/mercury/new-change.js';
-import { getChangeStatus, loadSchema } from '../src/mercury/artifact-graph.js';
+import { getApplyInstructions, getChangeStatus, listChanges, loadSchema } from '../src/mercury/artifact-graph.js';
 
 function usage() {
   return [
     'Usage: cwf new change <name> [--schema <name>] [--goal <text>] [--description <text>] [--json]',
+    '       cwf list [--json]',
     '       cwf status --change <name> [--json]',
-    '       cwf instructions <proposal|design|tasks> --change <name> [--json]',
+    '       cwf instructions <proposal|specs|design|tasks|apply> --change <name> [--json]',
   ].join('\n');
+}
+
+function formatApply(output) {
+  const lines = [
+    `change: ${output.change} (schema: ${output.schemaName})`,
+    `state: ${output.state}`,
+    `progress: ${output.progress.completed}/${output.progress.total} 已完成，${output.progress.remaining} 剩余`,
+  ];
+  if (output.missingArtifacts.length) lines.push(`缺失 artifact: ${output.missingArtifacts.join('、')}`);
+  if (output.tasks.length) {
+    lines.push('tasks:');
+    for (const task of output.tasks) lines.push(`  [${task.done ? 'x' : ' '}] ${task.text}`);
+  }
+  return lines.join('\n');
 }
 
 function parseOptions(arguments_) {
@@ -72,10 +87,24 @@ try {
         console.log(`Schema: ${change.schema}`);
         console.log(`Next: cwf status --change ${change.id}`);
       }
+    } else if (verb === 'list') {
+      const options = parseOptions([noun, name, ...arguments_].filter(Boolean));
+      const changes = listChanges(getPlanningRoot());
+      if (options.json) {
+        console.log(JSON.stringify({ changes }, null, 2));
+      } else {
+        console.log(changes.length
+          ? changes.map((change) => `${change.id} (${change.schema ?? 'unknown'})`).join('\n')
+          : 'No changes found.');
+      }
     } else if (verb === 'status') {
       const options = parseChangeOptions([noun, name, ...arguments_].filter(Boolean));
       const output = getChangeStatus(getPlanningRoot(), options.change);
       console.log(options.json ? JSON.stringify(output, null, 2) : output.artifacts.map((artifact) => `${artifact.id}: ${artifact.status}`).join('\n'));
+    } else if (verb === 'instructions' && noun === 'apply') {
+      const options = parseChangeOptions([name, ...arguments_].filter(Boolean));
+      const output = getApplyInstructions(getPlanningRoot(), options.change);
+      console.log(options.json ? JSON.stringify(output, null, 2) : formatApply(output));
     } else if (verb === 'instructions' && noun) {
       const options = parseChangeOptions([name, ...arguments_].filter(Boolean));
       const status = getChangeStatus(getPlanningRoot(), options.change);

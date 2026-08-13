@@ -39,7 +39,7 @@ metadata:
 
    解析 JSON 以了解：
    - `schemaName`：正在使用的工作流
-   - `planningHome`、`changeRoot`、`artifactPaths` 和 `actionContext`：路径和范围上下文
+   - `planningHome`、`changeRoot`、`artifactPaths`：路径和范围上下文
    - `artifacts`：artifact 列表及其状态（`done` 或其他）
 
    **若任一 artifact 未处于 `done` 状态：**

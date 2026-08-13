@@ -40,7 +40,7 @@ metadata:
    ```
    解析 JSON 以了解：
    - `schemaName`：正在使用的工作流（例如 `"spec-driven"`）
-   - `planningHome`、`changeRoot` 和 `actionContext`：规划范围和编辑约束
+   - `planningHome`、`changeRoot`：规划范围和编辑约束
    - 哪个 artifact 包含任务（对于 spec-driven 通常为 `"tasks"`；其他 schema 需检查状态）
 
 3. **获取 apply 指引**
@@ -56,7 +56,7 @@ metadata:
    - 基于当前状态的动态指引
 
    **处理状态：**
-   - 若 `state: "blocked"`（缺少 artifact）：显示提示，并建议使用 cwf-continue-change
+   - 若 `state: "blocked"`（缺少 artifact）：显示提示，并建议使用 cwf-propose 补齐缺失 artifact
    - 若 `state: "all_done"`：告知用户已完成，并建议归档
    - 否则：继续实施
 
